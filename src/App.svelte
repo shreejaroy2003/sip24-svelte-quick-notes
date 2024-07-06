@@ -27,6 +27,19 @@
     localStorage.setItem("pages",JSON.stringify(pages));
   }
 
+  function deleteNote() {
+    if (confirm(`Are you sure you want to delete the note "${title}"?`)) {
+      localStorage.removeItem(title);
+      pages.splice(currentPageIndex, 1);
+      if (pages.length == 0) {
+        addPage();
+      } else {
+        selectPage(currentPageIndex > 0 ? currentPageIndex - 1 : 0);
+      }
+      localStorage.setItem("pages", JSON.stringify(pages));
+    }
+  }
+
   function addPage(){
     pages.push("New Page");
     selectPage(pages.length ? pages.length - 1 : 0);
@@ -56,7 +69,10 @@
 <main class="p-4 ml-60 h-auto">
   <div class="grid grid-cols-2 items-center mb-3">
     <h1 class="text-3xl font-bold" contenteditable bind:textContent={title}></h1>
-    <button class="ml-auto bg-gray-800 text-white px-5 py-2.5 rounded-lg font-medium text-sm mt-3 hover:bg-gray-900" on:click={saveNote}>Save</button>
+    <div class="flex justify-end">
+      <button class="ml-auto bg-gray-800 text-white px-5 py-2.5 rounded-lg font-medium text-sm mt-3 hover:bg-gray-900" on:click={saveNote}>Save</button>
+      <button class="ml-2 bg-red-500 text-white px-5 py-2.5 rounded-lg font-medium text-sm mt-3 hover:bg-red-700" on:click={deleteNote}>Delete</button>
+    </div>
   </div>
   <hr/>
   <textarea class=" mt-3 block w-full bg-gray-50 border border-gray-300 rounded-lg text-gray-900 p-2.5" bind:value={note}></textarea>
